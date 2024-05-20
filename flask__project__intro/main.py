@@ -3,9 +3,33 @@
 # Press Maj+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
+import os
 
 app = Flask(__name__)
+
+app.config['UPLOAD_FOLDER'] = 'uploads'
+# Ensure the upload folder exists
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    os.makedirs(app.config['UPLOAD_FOLDER'])
+
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return 'No file part'
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return 'No selected file'
+
+    if file:
+        filename = file.filename
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        return f'File {filename} uploaded successfully!'
+
+    return 'File upload failed'
 
 @app.route("/")
 def hello__world():
@@ -19,7 +43,7 @@ def hello__world():
 def home():
     return render_template("home.html")
 
-@app.route("/file")
+""""""@app.route("/file")
 def upload():
     return render_template("file.html")
 
