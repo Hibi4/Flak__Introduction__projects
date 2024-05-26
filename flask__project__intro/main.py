@@ -9,9 +9,17 @@ import os
 app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = 'uploads'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
 # Ensure the upload folder exists
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+""" return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS """
 
 
 @app.route('/file', methods=['POST'])
@@ -25,9 +33,12 @@ def upload_file():
         return 'No selected file'
 
     if file:
-        filename = file.filename
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return f'File {filename} uploaded successfully!'
+        if file and allowed_file(file.filename):
+            filename = file.filename
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return f'File {filename} uploaded successfully!'
+        else:
+            return "This file extension is not allowed"
 
     return 'File upload failed'
 
