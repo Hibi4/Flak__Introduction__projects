@@ -8,8 +8,10 @@
   <h1>Page to upload a file from your computer.</h1>
   <div>
       <form action="/file" method="post" enctype="multipart/form-data">
+          <input type="file" name="file">
           <input type="submit" value="Upload file">
-          <input type="submit" value="Upload file">
+          <!-- <input type="file" value="Upload file">
+          <input type="submit" value="Save file"> -->
       </form>
       <!--
       <form action="/upload" method="post" enctype="multipart/form-data">

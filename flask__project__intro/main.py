@@ -14,7 +14,7 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
 
-@app.route('/upload', methods=['POST'])
+@app.route('/file', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
         return 'No file part'
@@ -43,7 +43,7 @@ def hello__world():
 def home():
     return render_template("home.html")
 
-""""""@app.route("/file")
+@app.route("/file")
 def upload():
     return render_template("file.html")
 
